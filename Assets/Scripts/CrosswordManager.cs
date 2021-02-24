@@ -10,7 +10,8 @@ public class CrosswordManager : Singleton<CrosswordManager>
     [SerializeField]
     private Transform map;
 
-
+    [SerializeField]
+    private GameObject crosswordPanel;
 
     /// <summary>
     /// A dictionary that contains all the tiles in the game.
@@ -45,17 +46,20 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         Tiles = new Dictionary<Point, TileScript>();
 
+        //rectTransform = GetComponent<RectTransform>();
+
         //Calculate the grid's size using World Units
 
         float worldGridLength = gridRows * TileSize;
 
         //Convert to Screen Units
 
-        float ScreenGridLength = Camera.main.WorldToScreenPoint(new Vector3(worldGridLength, worldGridLength)).x - Camera.main.WorldToScreenPoint(new Vector3(0,0)).x; 
+        float screenGridLength = Camera.main.WorldToScreenPoint(new Vector3(worldGridLength, worldGridLength)).x - Camera.main.WorldToScreenPoint(new Vector3(0,0)).x;
+        float screenPanelYPosition = Camera.main.WorldToScreenPoint(crosswordPanel.transform.position).y;
 
         //Calculates the grid's start point.
 
-        Vector3 gridStart = Camera.main.ScreenToWorldPoint(new Vector3((Screen.width - ScreenGridLength)/2, Screen.height));
+        Vector3 gridStart = Camera.main.ScreenToWorldPoint(new Vector3((Screen.width - screenGridLength)/2, screenPanelYPosition));
 
         for (int y = 0; y < gridRows; y++) //The y positions of the tiles
         {
