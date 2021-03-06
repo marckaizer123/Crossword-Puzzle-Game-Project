@@ -23,7 +23,7 @@ public class TileScript : MonoBehaviour
         this.GridPosition = gridPos;
         this.transform.position = worldPos;
         this.transform.SetParent(parent);
-        CrosswordManager.Instance.Tiles.Add(gridPos, this);
+        GridManager.Instance.Tiles.Add(gridPos, this);
     }
 
 

@@ -4,11 +4,5 @@ using UnityEngine;
 
 namespace Globals
 {
-    public enum Direction 
-    {   Down = 1, 
-        Right, 
-        Left, 
-        Up,
-        None
-    };
+    public enum Direction { Down = 1, Right, Left, Up, None };
 }

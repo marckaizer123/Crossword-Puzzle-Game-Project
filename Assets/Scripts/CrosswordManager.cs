@@ -6,19 +6,6 @@ using Globals;
 
 public class CrosswordManager : Singleton<CrosswordManager>
 {
-
-    [SerializeField]
-    private GameObject crosswordPanel;
-
-    [SerializeField]
-    private GameObject[] tilePrefabs;
-
-    [SerializeField]
-    private Transform map;
-
-    [SerializeField]
-    private int gridRows;
-
     [SerializeField]
     private int initWordCount;
 
@@ -46,7 +33,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
 
         GetMasterList();
 
-        CreateGrid();
+        
     }
 
     public void GetMasterList() //To do: add a switch case for different categories of crossword puzzles.
@@ -68,7 +55,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
         try
         {
             quizList.Clear();
-            wordMatrix = new char[gridRows, gridRows];
+            wordMatrix = new char[GameManager.Instance.GridCellCount, GameManager.Instance.GridCellCount];
             rnd = new System.Random(System.DateTime.Now.Millisecond);
             Direction direction;
             int x, y;
@@ -86,8 +73,8 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 do
                 {
                     direction = GetDirection(rnd, 3);
-                    x = GetRandomAxis(rnd, gridRows);
-                    y = GetRandomAxis(rnd, gridRows);
+                    x = GetRandomAxis(rnd, GameManager.Instance.GridCellCount);
+                    y = GetRandomAxis(rnd, GameManager.Instance.GridCellCount);
                     success = PlaceTheWord(direction, x, y, masterList[i].Key, masterList[i].Value, i, ref attempts);
                     if (attempts > maxAttempts)
                     {
@@ -166,7 +153,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 case Direction.Right:
                     for (int i = 0, xx = x; i < word.Length; i++, xx++) // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (xx >= gridRows) return false;  // Falling outside the grid. Hence placement unavailable.
+                        if (xx >= GameManager.Instance.GridCellCount) return false;  // Falling outside the grid. Hence placement unavailable.
                         if (wordMatrix[xx, y] != '\0') // If there is a character on that square then:
                         {
                             if (wordMatrix[xx, y] != word[i])   // If there is an overlap, then we see if the characters match. If matches, then it can still go there.
@@ -234,7 +221,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 case Direction.Down:
                     for (int i = 0, yy = y; i < word.Length; i++, yy++)     // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (yy >= gridRows) return false;      // Falling outside the grid. Hence placement unavailable.
+                        if (yy >= GameManager.Instance.GridCellCount) return false;      // Falling outside the grid. Hence placement unavailable.
                         if (wordMatrix[x, yy] != '\0')
                         {
                             if (wordMatrix[x, yy] != word[i])                   // If there is an overlap, then we see if the characters match. If matches, then it can still go there.
@@ -391,9 +378,9 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         try
         {
-            if (x == gridRows) return true;
+            if (x == GameManager.Instance.GridCellCount) return true;
             bool isValid = true;
-            if (x + 1 < gridRows)
+            if (x + 1 < GameManager.Instance.GridCellCount)
             {
                 for (int i = 0; i < word.Length; y++, i++)
                 {
@@ -426,8 +413,8 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         try
         {
-            if (x + word.Length == gridRows) return true;
-            if (x + word.Length < gridRows)
+            if (x + word.Length == GameManager.Instance.GridCellCount) return true;
+            if (x + word.Length < GameManager.Instance.GridCellCount)
                 return wordMatrix[x + word.Length, y] == '\0';
             return false;
         }
@@ -521,9 +508,9 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         try
         {
-            if (y == gridRows) return true;
+            if (y == GameManager.Instance.GridCellCount) return true;
             bool isValid = true;
-            if (y + 1 < gridRows)
+            if (y + 1 < GameManager.Instance.GridCellCount)
             {
                 for (int i = 0; i < word.Length; x++, i++)
                 {
@@ -556,8 +543,8 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         try
         {
-            if (y + word.Length == gridRows) return true;
-            if (y + word.Length < gridRows)
+            if (y + word.Length == GameManager.Instance.GridCellCount) return true;
+            if (y + word.Length < GameManager.Instance.GridCellCount)
                 return wordMatrix[x, y + word.Length] == '\0';
             return false;
         }
@@ -577,7 +564,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
     /// <returns></returns>
     bool LegitimateOverlapOfAnExistingWord(int x, int y, string word, Direction direction)
     {
-        char[] chars = new char[gridRows];
+        char[] chars = new char[GameManager.Instance.GridCellCount];
         int originalX = x, originalY = y;
         try
         {
@@ -588,7 +575,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         if (wordMatrix[x, y] == '\0') break;                                // First walk towards the left until you reach the beginning of the word that is already on the board.
                     ++x;
 
-                    for (int i = 0; x < gridRows && i < gridRows; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
+                    for (int i = 0; x < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -606,7 +593,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         if (wordMatrix[x, y] == '\0') break;                                // First walk towards the left until you reach the beginning of the word that is already on the board.
                     ++x;
 
-                    for (int i = 0; x < gridRows && i < gridRows; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
+                    for (int i = 0; x < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -624,7 +611,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         if (wordMatrix[x, y] == '\0') break;                                        // First walk upwards until you reach the beginning of the word that is already on the board.
                     ++y;
 
-                    for (int i = 0; y < gridRows && i < gridRows; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
+                    for (int i = 0; y < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -642,7 +629,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         if (wordMatrix[x, y] == '\0') break;                                        // First walk upwards until you reach the beginning of the word that is already on the board.
                     ++y;
 
-                    for (int i = 0; y < gridRows && i < gridRows; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
+                    for (int i = 0; y < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -692,7 +679,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
 
             quizList.Add(word);
             DebugCrossword();
-            DebugList();
+            //DebugList();
 
             
         }
@@ -706,19 +693,13 @@ public class CrosswordManager : Singleton<CrosswordManager>
     private void DebugCrossword()
     {
         string row;
-
-        for (int x = 0; x < gridRows; x++)
+        for (int x = 0; x < GameManager.Instance.GridCellCount; x++)
         {
             row = "";
-
-            for (int y = 0; y < gridRows; y++)
+            for (int y = 0; y < GameManager.Instance.GridCellCount; y++)
             {
-
-                row += wordMatrix[x, y];
-
-                
+                row += wordMatrix[x, y];    
             }
-
             Debug.Log(row);
         }
     }
@@ -731,67 +712,21 @@ public class CrosswordManager : Singleton<CrosswordManager>
         }
     }
 
-
-
-
-    /// <summary>
-    /// A dictionary that contains all the tiles in the game.
-    /// </summary>
-    public Dictionary<Point, TileScript> Tiles { get; set; }
-
-    public float TileSize //Gets the width of the tile.
+    private void PlaceWordsOnScreen()
     {
-        get
+        foreach (Word word in quizList)
         {
-            return (tilePrefabs[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x * tilePrefabs[0].transform.localScale.x);
-        }
-    }
-
-    
-
-
-    private void PlaceTile(int tileIndex, int x, int y, Vector3 gridStart)
-    {
-
-        //Creates a new tile and makes a reference to that tile using the newTile variable.
-        TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
-
-        //Sets the position of the tile.
-        newTile.Setup(new Point(x, y), new Vector3(gridStart.x + (TileSize * x), gridStart.y - (TileSize * y), 0), map);
-    }
-
-    private void CreateGrid()
-    {
-        Tiles = new Dictionary<Point, TileScript>();
-
-        //Calculate the grid's size using World Units
-
-        float worldGridLength = gridRows * TileSize;
-
-        //Convert to Screen Units
-
-        float screenGridLength = Camera.main.WorldToScreenPoint(new Vector3(worldGridLength, worldGridLength)).x - Camera.main.WorldToScreenPoint(new Vector3(0,0)).x;
-        float screenPanelYPosition = Camera.main.WorldToScreenPoint(crosswordPanel.transform.position).y;
-
-        //Calculates the grid's start point.
-
-        Vector3 gridStart = Camera.main.ScreenToWorldPoint(new Vector3((Screen.width - screenGridLength)/2, screenPanelYPosition));
-
-        for (int y = 0; y < gridRows; y++) //The y positions of the tiles
-        {
-            for (int x = 0; x < gridRows; x++) // The x positions of the tiles
+            if (!word.FailedMaxAttempts)
             {
-                //Places the tile in the world
-                PlaceTile(0,
-                          x,
-                          y,
-                          gridStart);
+
             }
         }
     }
 
 
 
+
+    
     
     
 
