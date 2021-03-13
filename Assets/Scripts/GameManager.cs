@@ -6,24 +6,22 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    private int gridCellCount;
+    private int gridCellCount = 10;
 
     public int GridCellCount
     {
         get { return gridCellCount; }
     }
 
-    private Sprite[] flags;
-    private Sprite[] logos;
-    private Sprite[] movies;
+    public Sprite[] flags;
+    public Sprite[] logos;
+    public Sprite[] movies;
+
+    public List<KeyValuePair<string, Sprite>> flagNames = new List<KeyValuePair<string, Sprite>>();
+    public List<KeyValuePair<string, Sprite>> logoNames= new List<KeyValuePair<string, Sprite>>();
+    public List<KeyValuePair<string, Sprite>> movieNames = new List<KeyValuePair<string, Sprite>>();
 
 
-    public List<string> flagNames;
-    public List<string> logoNames;
-    public List<string> movieNames;
-
-    [SerializeField]
-    private int maxWordLength;
 
     private void Awake()
     {
@@ -33,26 +31,36 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         GetWordLists();
+
+        CrosswordManager.Instance.GetMasterList("Flags");
     }
 
     private void GetWordLists()
     {
-        flags = Resources.LoadAll<Sprite>("Flags") as Sprite[];
-        logos = Resources.LoadAll<Sprite>("Logos") as Sprite[];
-        movies = Resources.LoadAll<Sprite>("Movies") as Sprite[];
-
+        flags = Resources.LoadAll<Sprite>("Flags");
+        logos = Resources.LoadAll<Sprite>("Logos");
+        movies = Resources.LoadAll<Sprite>("Movies");
 
         foreach (Sprite sprite in flags)
         {
-            flagNames.Add(sprite.name);
+            if (sprite.name.Length < 3 * gridCellCount / 5)
+            {
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+            }           
         }
         foreach (Sprite sprite in logos)
         {
-            logoNames.Add(sprite.name);
+            if (sprite.name.Length < 3 * gridCellCount / 5)
+            {
+                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+            }
         }
         foreach (Sprite sprite in movies)
         {
-            movieNames.Add(sprite.name);
+            if (sprite.name.Length < 3 * gridCellCount / 5)
+            {
+                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+            }
         }
     }
 

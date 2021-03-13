@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Globals;
 
 /// <summary>
@@ -11,26 +12,21 @@ public class GridManager : Singleton<GridManager>
     [SerializeField]
     private GameObject crosswordPanel;
 
-
-    [SerializeField]
-    private Transform grid;
-
     [SerializeField]
     private GameObject[] tilePrefabs;
-
-    public float TileSize //Gets the width of the tile.
-    {
-        get
-        {
-            return (tilePrefabs[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x * tilePrefabs[0].transform.localScale.x);
-        }
-    }
 
     /// <summary>
     /// A dictionary that contains all the tiles in the game.
     /// </summary>
     public Dictionary<Point, TileScript> Tiles { get; set; }
 
+    public float TileSize //Gets the width of the tile.
+    {
+        get
+        {
+            return (tilePrefabs[0].GetComponent<Image>().sprite.bounds.size.x * tilePrefabs[0].transform.localScale.x);
+        }
+    }
 
 
     // Start is called before the first frame update
@@ -39,48 +35,36 @@ public class GridManager : Singleton<GridManager>
         CreateGrid();
     }
 
-    private void PlaceTile(int tileIndex, int x, int y, Vector3 gridStart)
-    {
-
-        //Creates a new tile and makes a reference to that tile using the newTile variable.
-        TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
-
-        //Sets the position of the tile.
-        newTile.Setup(new Point(x, y), new Vector3(gridStart.x + (TileSize * x), gridStart.y - (TileSize * y), 0), grid);
-    }
-
     private void CreateGrid()
     {
-        Tiles = new Dictionary<Point, TileScript>();
 
-        //Calculate the grid's size using World Units
-
-        float worldGridLength = GameManager.Instance.GridCellCount * TileSize;
-
-        //Convert to Screen Units
-
-        float screenGridLength = Camera.main.WorldToScreenPoint(new Vector3(worldGridLength, worldGridLength)).x - Camera.main.WorldToScreenPoint(new Vector3(0, 0)).x;
-        float screenPanelYPosition = Camera.main.WorldToScreenPoint(crosswordPanel.transform.position).y;
-
-        //Calculates the grid's start point.
-
-        Vector3 gridStart = Camera.main.ScreenToWorldPoint(new Vector3((Screen.width - screenGridLength) / 2, screenPanelYPosition));
-
-        for (int y = 0; y < GameManager.Instance.GridCellCount; y++) //The y positions of the tiles
+        for (int x = 0; x < CrosswordManager.Instance.wordMatrix.GetLength(0); x++)
         {
-            for (int x = 0; x < GameManager.Instance.GridCellCount; x++) // The x positions of the tiles
+            for (int y = 0; y < CrosswordManager.Instance.wordMatrix.GetLength(1); y++)
             {
-                //Places the tile in the world
-                PlaceTile(0,
-                          x,
-                          y,
-                          gridStart);
+                if (CrosswordManager.Instance.wordMatrix[x, y].Equals('\0'))
+                {
+                    PlaceTile(1, x, y, CrosswordManager.Instance.wordMatrix[x, y]);
+                }
+                else
+                {
+                    PlaceTile(0, x, y, CrosswordManager.Instance.wordMatrix[x, y]);
+                }
+
+               
             }
         }
-
-        CreateNodes(); //Adds the tiles, their gridPosition, and their worldPositions into a list.
     }
 
+    private void PlaceTile(int tileIndex, int x, int y, char letter)
+    {
+        TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
+
+        //Sets the parameters of the tile.
+        newTile.Setup2(crosswordPanel.transform, new Point(x, y), letter);
+    }
+
+    
 
     private void CreateNodes()
     {
@@ -91,14 +75,5 @@ public class GridManager : Singleton<GridManager>
         {
             nodes.Add(tile.GridPosition, new Node(tile));
         }
-    }
-
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

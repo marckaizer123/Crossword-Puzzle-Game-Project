@@ -12,42 +12,50 @@ public class CrosswordManager : Singleton<CrosswordManager>
     [SerializeField]
     private int maxAttempts;
 
-    private List<KeyValuePair<string, Sprite>> masterList = new List<KeyValuePair<string, Sprite>>(); //Contains the words and clues that the crossword would build from.
-
     private List<Word> quizList = new List<Word>(); //Contains all the words that have been already been placed into the wordMatrix, as well as their corresponding sprite and positions.
 
     private List<Direction> directions = new List<Direction>();
 
     private System.Random rnd;
 
-    private char[,] wordMatrix; // wordMatrix that simulates the grid and holds the letters.
+    public char[,] wordMatrix; // wordMatrix that simulates the grid and holds the letters.
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         directions.Add(Direction.Down);
         directions.Add(Direction.Right);
         directions.Add(Direction.None);
-
-        GetMasterList();
-
-        
     }
 
-    public void GetMasterList() //To do: add a switch case for different categories of crossword puzzles.
+    /// <summary>
+    /// Chooses the list that will be used to build the crossword.
+    /// </summary>
+    /// <param name="category"></param>
+    public void GetMasterList(string category)
     {
-        string category = "Flags";
-
-        Sprite[] clues = Resources.LoadAll<Sprite>(category) as Sprite[];
-
-        foreach (Sprite sprite in clues)
+        switch (category)
         {
-            masterList.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
-        }
-
-        PlaceWordsOnGrid(masterList);
+            case "Flags":
+                {
+                    PlaceWordsOnGrid(GameManager.Instance.flagNames);
+                    break;
+                }
+            case "Logos":
+                {
+                    PlaceWordsOnGrid(GameManager.Instance.logoNames);
+                    break;
+                }
+            case "Movies":
+                {
+                    PlaceWordsOnGrid(GameManager.Instance.movieNames);
+                    break;
+                }
+            default:
+                {
+                    PlaceWordsOnGrid(GameManager.Instance.flagNames);
+                    break;
+                }
+        }     
     }
 
     private void PlaceWordsOnGrid(List<KeyValuePair<string, Sprite>> masterList)
@@ -62,6 +70,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
             long attempts;
             bool success;
             string word;
+
 
             /**/
             for (int i = 0; i < masterList.Count; i++)
@@ -86,14 +95,81 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 }
                 while (!success);
             }
-
-
+            foreach (Word wrd in quizList)             // Flag the words that are completely isolated.
+            {
+                CheckIfTheWordIsIsolatedAndFlagAccordingly(wrd);
+            }
+            
+            DebugList();
+            DebugCrossword();
 
         }
         catch (System.Exception e)
         {
             
             Debug.Log($"An error occurred in 'PlaceWordsOnTheBoard()' method of the 'GameEngine' class. Error msg: {e.Message}");
+        }
+    }
+
+
+    private void CheckIfTheWordIsIsolatedAndFlagAccordingly(Word wrd)
+    {
+        try
+        {
+            if (wrd.WordDirection == Direction.Down)
+            {
+                if (wrd.WordPosition.X > 0)                                                                  // If there is a column of cells to the left of the down-directed word.
+                    for (int x = wrd.WordPosition.X - 1, y = wrd.WordPosition.Y, i = 0; i < wrd.WordSpelling.Length; y++, i++)    // Walk downwards along the left column of the word.
+                        if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that column.
+                        {                                                                       // Which would mean another word passed through; hence this is not isolated.
+                            wrd.Isolated = false;
+                            return;
+                        }
+                if (wrd.WordPosition.X < GameManager.Instance.GridCellCount - 1)                                          // If there is a column of cells to the right of the down-directed word.
+                    for (int x = wrd.WordPosition.X + 1, y = wrd.WordPosition.Y, i = 0; i < wrd.WordSpelling.Length; y++, i++)    // Walk downwards along the right column of the word.
+                        if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that column.
+                        {                                                                       // Which would mean another word passed through; hence this is not isolated.
+                            wrd.Isolated = false;
+                            return;
+                        }
+            }
+            else if (wrd.WordDirection == Direction.Right)
+            {
+                if (wrd.WordPosition.Y > 0)                                                                  // If there is a row of cells to the top of the right-directed word.
+                    for (int x = wrd.WordPosition.X, y = wrd.WordPosition.Y - 1, i = 0; i < wrd.WordSpelling.Length; x++, i++)    // Walk righwards along the top row of the word.
+                        if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that row.
+                        {                                                                       // Which would mean another word passed through; hence this is not isolated.
+                            wrd.Isolated = false;
+                            return;
+                        }
+                if (wrd.WordPosition.Y < GameManager.Instance.GridCellCount - 1)                                          // If there is a row of cells to the bottom of the right-directed word.
+                    for (int x = wrd.WordPosition.X, y = wrd.WordPosition.Y + 1, i = 0; i < wrd.WordSpelling.Length; x++, i++)    // Walk righwards along the bottom row of the word.
+                        if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that row.
+                        {                                                                       // Which would mean another word passed through; hence this is not isolated.
+                            wrd.Isolated = false;
+                            return;
+                        }
+            }
+
+            // Reaching this point would mean that the word didn't cross through another word.
+            // Hence flag it as isolated and clear the corresponding cells in the character wordMatrix.
+            // However, if that is already flaged as failed, then no need to flag it again as isolated.
+
+            if (!wrd.FailedMaxAttempts)
+                wrd.Isolated = true;
+
+            if (wrd.WordDirection == Direction.Down)
+                for (int i = 0, x = wrd.WordPosition.X, y = wrd.WordPosition.Y; i < wrd.WordSpelling.Length && i < GameManager.Instance.GridCellCount; i++, y++)
+                    wordMatrix[x, y] = '\0';
+            else if (wrd.WordDirection == Direction.Right)
+                for (int i = 0, x = wrd.WordPosition.X, y = wrd.WordPosition.Y; i < wrd.WordSpelling.Length && i < GameManager.Instance.GridCellCount; i++, x++)
+                    wordMatrix[x, y] = '\0';
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log($"An error occurred in 'CheckIfTheWordIsIsolatedAndMarkAccordingly()' method of the" +
+                            $"'GameEngine' class. for {System.Environment.NewLine}word:'{wrd.WordSpelling}', x:{wrd.WordPosition.X}, y:{wrd.WordPosition.Y}, direction:{wrd.WordDirection}." +
+                            $"{System.Environment.NewLine}{System.Environment.NewLine}Error msg: " + e.Message);
         }
     }
 
@@ -153,7 +229,12 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 case Direction.Right:
                     for (int i = 0, xx = x; i < word.Length; i++, xx++) // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (xx >= GameManager.Instance.GridCellCount) return false;  // Falling outside the grid. Hence placement unavailable.
+                        if (xx >= GameManager.Instance.GridCellCount)
+                        {
+                            Debug.Log(word + " Fell out of the grid");
+                            return false;  // Falling outside the grid. Hence placement unavailable.
+                        }
+                            
                         if (wordMatrix[xx, y] != '\0') // If there is a character on that square then:
                         {
                             if (wordMatrix[xx, y] != word[i])   // If there is an overlap, then we see if the characters match. If matches, then it can still go there.
@@ -166,17 +247,26 @@ public class CrosswordManager : Singleton<CrosswordManager>
                     }
 
                     if (!placeAvailable)
+                    {
+                        Debug.Log(word + " Place was not available");
                         return false;
+                    }
 
                     // The first few words should be placed without overlapping.
                     if (currentWordCount < initWordCount && overlapped)
+                    {
+                        Debug.Log(word + " First words overlapped");
                         return false;
+                    }
 
                     // If overlapping didn't occur after the maximum allowed non-overlapping words for the first few runs (e.g. first 5 words)
                     // then trigger a re-position attempt (by returning false to the calling method which will in turn trigger another search until
                     // an overlapping position is found.)
                     else if (currentWordCount >= initWordCount && !overlapped)
+                    {
+                        Debug.Log(word + " Words did not overlap");
                         return false;
+                    }
 
                     // If it is a right-direction, then there should not be any character in the adjacent cell to the left of the beginning of this word.
                     // E.g.: If CAT is to be placed, then it cannot be placed with another word CLASS as C L A S S C A T
@@ -211,17 +301,26 @@ public class CrosswordManager : Singleton<CrosswordManager>
                     bool rightMostFree = RightMostCellFreeForRightDirectedWord(x, y, word);
 
                     // If cells that need to be free are not free, then this word cannot be placed there.
-                    if (!leftFree || !topFree || !bottomFree || !rightMostFree) return false;
+                    if (!leftFree || !topFree || !bottomFree || !rightMostFree)
+                    {
+                        Debug.Log(word + " Cells were not free");
+                        return false;
+                    }
 
                     // If all the cells are blank, or a non-conflicting overlap is available, then this word can be placed there. So place it.
                     for (int i = 0, j = x; i < word.Length; i++, j++)
                         wordMatrix[j, y] = word[i];
                     AddWordToList(word, wordClue, x, y, direction, attempts, false);
                     return true;
+
                 case Direction.Down:
                     for (int i = 0, yy = y; i < word.Length; i++, yy++)     // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (yy >= GameManager.Instance.GridCellCount) return false;      // Falling outside the grid. Hence placement unavailable.
+                        if (yy >= GameManager.Instance.GridCellCount)
+                        {
+                            Debug.Log(word + "Fell out of the grid");
+                            return false;  // Falling outside the grid. Hence placement unavailable.
+                        }
                         if (wordMatrix[x, yy] != '\0')
                         {
                             if (wordMatrix[x, yy] != word[i])                   // If there is an overlap, then we see if the characters match. If matches, then it can still go there.
@@ -234,17 +333,27 @@ public class CrosswordManager : Singleton<CrosswordManager>
                     }
 
                     if (!placeAvailable)
+                    {
+                        Debug.Log(word + " Place was not available");
                         return false;
+                    }
+                        
 
                     // The first few words should be placed without overlapping.
                     if (currentWordCount < initWordCount && overlapped)
+                    {
+                        Debug.Log(word + " First words overlapped");
                         return false;
+                    }
 
                     // If overlapping didn't occur after the maximum allowed non-overlapping words for the first few runs (e.g. first 5 words)
                     // then trigger a re-position attempt (by returning false to the calling method which will in turn trigger another search until
                     // an overlapping position is found.)
                     else if (currentWordCount >= initWordCount && !overlapped)
+                    {
+                        Debug.Log(word + " Words did not overlap");
                         return false;
+                    }
 
                     // If it is a right-direction, then check if it can cross through another word. E.g.: If STICK the current word, see if there
                     // is a valid crossing through existing words on the board - CAT, SKID:
@@ -279,7 +388,11 @@ public class CrosswordManager : Singleton<CrosswordManager>
                     bool bottomMostBottomFree = BottomMostBottomCellFreeForDownDirectedWord(x, y, word);
 
                     // If cells that need to be free are not free, then this word cannot be placed there.
-                    if (!leftFree || !rightFree || !topFree || !bottomMostBottomFree) return false;
+                    if (!leftFree || !rightFree || !topFree || !bottomMostBottomFree)
+                    {
+                        Debug.Log(word + " Cells were not free");
+                        return false;
+                    }
 
                     // If all the cells are blank, or a non-conflicting overlap is available, then this word can be placed there. So place it.
                     for (int i = 0, j = y; i < word.Length; i++, j++)
@@ -287,6 +400,8 @@ public class CrosswordManager : Singleton<CrosswordManager>
                     AddWordToList(word, wordClue, x, y, direction, attempts, false);
                     return true;
             }
+
+            Debug.Log(word + " No Direction");
             return false;   // Otherwise continue with a different place and index.
         }
         catch (System.Exception e)
@@ -668,18 +783,19 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         try
         {
-            Word word = new Word();
-
-            word.WordSpelling = wordSpelling;
-            word.WordClue = wordClue;
-            word.WordPosition = new Point(x, y);
-            word.WordDirection = direction;
-            word.AttemptsCount = attempts;
-            word.FailedMaxAttempts = failedMaxAttempts;
+            Word word = new Word
+            {
+                WordSpelling = wordSpelling,
+                WordClue = wordClue,
+                WordPosition = new Point(x, y),
+                WordDirection = direction,
+                AttemptsCount = attempts,
+                FailedMaxAttempts = failedMaxAttempts
+            };
 
             quizList.Add(word);
-            DebugCrossword();
-            //DebugList();
+            
+            
 
             
         }
@@ -687,6 +803,11 @@ public class CrosswordManager : Singleton<CrosswordManager>
         {
             Debug.Log($"An error occurred in 'AddWordToList()' method of the 'GameEngine' class. Error msg: {e.Message}");
         }
+    }
+
+    private void GetWordSprites()
+    {
+
     }
 
 
@@ -698,9 +819,11 @@ public class CrosswordManager : Singleton<CrosswordManager>
             row = "";
             for (int y = 0; y < GameManager.Instance.GridCellCount; y++)
             {
-                row += wordMatrix[x, y];    
+                row = row + " " + wordMatrix[y, x];
+                Debug.Log(row);
             }
-            Debug.Log(row);
+            
+
         }
     }
 
@@ -708,9 +831,10 @@ public class CrosswordManager : Singleton<CrosswordManager>
     {
         foreach (var word in quizList)
         {
-            Debug.Log(word.WordSpelling + " " +  word.WordPosition.X + " " + word.WordPosition.Y);
+            Debug.Log(word.WordSpelling + " " +  word.WordPosition.X + " " + word.WordPosition.Y + " " + word.AttemptsCount);
         }
     }
+
 
     private void PlaceWordsOnScreen()
     {

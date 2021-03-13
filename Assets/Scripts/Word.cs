@@ -7,7 +7,6 @@ using Globals;
 public class Word : IDetails
 {
 
-
     public string WordSpelling{ get; set; }
     public Sprite WordClue { get; set; }
     public Point WordPosition { get; set; }
