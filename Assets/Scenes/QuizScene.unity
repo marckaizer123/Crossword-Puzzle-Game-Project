@@ -185,7 +185,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -268,7 +268,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &778604480
 GameObject:
@@ -436,6 +436,10 @@ MonoBehaviour:
   flags: []
   logos: []
   movies: []
+  mainMenuPanel: {fileID: 0}
+  categoryPanel: {fileID: 0}
+  optionsPanel: {fileID: 0}
+  creditsPanel: {fileID: 0}
 --- !u!4 &936923157
 Transform:
   m_ObjectHideFlags: 0
@@ -448,7 +452,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &989313365
 GameObject:
@@ -478,7 +482,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1169156511
 GameObject:
@@ -517,8 +521,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.0015259, y: -391.5}
-  m_SizeDelta: {x: 625.3293, y: 637.35657}
+  m_AnchoredPosition: {x: 0.0015259, y: -379.6}
+  m_SizeDelta: {x: 625.3293, y: 613.53625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1169156513
 MonoBehaviour:
@@ -694,7 +698,7 @@ RectTransform:
   - {fileID: 1169156512}
   - {fileID: 1713230976}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -735,8 +739,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 268}
-  m_SizeDelta: {x: 650.6061, y: 493.80157}
+  m_AnchoredPosition: {x: 0.0014648, y: 289}
+  m_SizeDelta: {x: 625.32935, y: 499.41333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1713230977
 MonoBehaviour:
@@ -836,8 +840,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e70199464afd45a1bcfce9dffc843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initWordCount: 4
-  maxAttempts: 100
+  initWordCount: 1
+  maxAttempts: 50
 --- !u!114 &2074316735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,6 +893,6 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 94.4444, y: 94.4444}
-  m_Spacing: {x: -47.22223, y: -47.22223}
+  m_Spacing: {x: -37.77776, y: -37.77776}
   m_Constraint: 0
   m_ConstraintCount: 1

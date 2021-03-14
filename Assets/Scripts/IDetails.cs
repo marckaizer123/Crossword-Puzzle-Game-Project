@@ -9,7 +9,7 @@ namespace Interfaces
     {
         string WordSpelling { get; set; }
         Sprite WordClue { get; set; }
-        Point WordPosition { get; set; }
+        Point StartPosition { get; set; }
         Direction WordDirection { get; set; }
         long AttemptsCount { get; set; }
         bool FailedMaxAttempts { get; set; }

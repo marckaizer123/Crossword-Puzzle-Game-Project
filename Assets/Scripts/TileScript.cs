@@ -17,31 +17,15 @@ public class TileScript : MonoBehaviour
     }
 
     public Text TileLetter;
-
-    
-
     public bool IsEmpty { get; set; }
 
-    public void Setup(Point gridPos, Vector3 worldPos, Transform parent)
-    {
-        this.transform.SetParent(parent, false);
 
-        IsEmpty = true; // sets the tile to be empty.
-        
-        this.GridPosition = gridPos;
-        this.transform.position = worldPos;
-
-       
-
-
-        GridManager.Instance.Tiles.Add(gridPos, this);
-    }
-
-    public void Setup2(Transform parent, Point gridPos, char letter)
+    public void Setup(Transform parent, Point gridPos, char letter)
     {
         this.transform.SetParent(parent, false);
         this.GridPosition = gridPos;
         this.TileLetter.text = letter.ToString();
+        GridManager.Instance.Tiles.Add(gridPos, this);
     }
 
     private void Awake()

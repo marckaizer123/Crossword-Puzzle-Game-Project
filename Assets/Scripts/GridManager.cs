@@ -37,6 +37,7 @@ public class GridManager : Singleton<GridManager>
 
     private void CreateGrid()
     {
+        Tiles = new Dictionary<Point, TileScript>();
 
         for (int x = 0; x < CrosswordManager.Instance.wordMatrix.GetLength(0); x++)
         {
@@ -49,9 +50,7 @@ public class GridManager : Singleton<GridManager>
                 else
                 {
                     PlaceTile(0, x, y, CrosswordManager.Instance.wordMatrix[x, y]);
-                }
-
-               
+                }            
             }
         }
     }
@@ -61,19 +60,6 @@ public class GridManager : Singleton<GridManager>
         TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
 
         //Sets the parameters of the tile.
-        newTile.Setup2(crosswordPanel.transform, new Point(x, y), letter);
-    }
-
-    
-
-    private void CreateNodes()
-    {
-        Dictionary<Point, Node> nodes = new Dictionary<Point, Node>();
-
-        //Add nodes to node dictionary
-        foreach (TileScript tile in GridManager.Instance.Tiles.Values)
-        {
-            nodes.Add(tile.GridPosition, new Node(tile));
-        }
+        newTile.Setup(crosswordPanel.transform, new Point(x, y), letter);
     }
 }

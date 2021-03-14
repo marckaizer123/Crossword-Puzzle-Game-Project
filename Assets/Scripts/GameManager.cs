@@ -45,24 +45,73 @@ public class GameManager : Singleton<GameManager>
         {
             if (sprite.name.Length < 3 * gridCellCount / 5)
             {
-                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite)); ;
             }           
         }
         foreach (Sprite sprite in logos)
         {
             if (sprite.name.Length < 3 * gridCellCount / 5)
             {
-                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
             }
         }
         foreach (Sprite sprite in movies)
         {
             if (sprite.name.Length < 3 * gridCellCount / 5)
             {
-                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name, sprite));
+                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
             }
         }
     }
+
+
+    [SerializeField]
+    private GameObject mainMenuPanel;
+
+    [SerializeField]
+    private GameObject categoryPanel;
+
+    [SerializeField]
+    private GameObject optionsPanel;
+
+    [SerializeField]
+    private GameObject creditsPanel;
+
+    public void ShowMainMenu()
+    {
+        mainMenuPanel.SetActive(true);
+    }
+
+    public void ShowCategories()
+    {
+        mainMenuPanel.SetActive(false);
+        categoryPanel.SetActive(true);
+    }
+    public void ShowOptions()
+    {
+        mainMenuPanel.SetActive(false);
+        optionsPanel.SetActive(true);
+    }
+    public void ShowCredits()
+    {
+        mainMenuPanel.SetActive(false);
+        creditsPanel.SetActive(true);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Back()
+    {
+        categoryPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+
+
 
 
 }
