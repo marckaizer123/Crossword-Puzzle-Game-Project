@@ -4,7 +4,7 @@ using UnityEngine;
 using Globals;
 
 
-public class CrosswordManager : Singleton<CrosswordManager>
+public class Crossword : Singleton<Crossword>
 {
     [SerializeField]
     private int initWordCount;
@@ -63,6 +63,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
         try
         {
             quizList.Clear();
+            usedWords.Clear();
             wordMatrix = new char[GameManager.Instance.GridCellCount, GameManager.Instance.GridCellCount];
             rnd = new System.Random(System.DateTime.Now.Millisecond);
             Direction direction;
@@ -233,7 +234,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         charPositions.Add(new Point(j, y));
                     }
                         
-                    AddWordToList(word, wordClue, x, y, direction, charPositions, attempts, false);
+                    AddWordToList(word, wordClue, x, y, direction, charPositions);
                     return true;
 
                 case Direction.Down:
@@ -319,7 +320,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                         charPositions.Add(new Point(x, j));
                     }
                         
-                    AddWordToList(word, wordClue, x, y, direction, charPositions, attempts, false);
+                    AddWordToList(word, wordClue, x, y, direction, charPositions);
                     usedWords.Add(word);
                     return true;
             }
@@ -700,7 +701,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
     /// <param name="direction"></param>
     /// <param name="attempts"></param>
     /// <param name="failedMaxAttempts"></param>
-    private void AddWordToList(string wordSpelling, Sprite wordClue, int x, int y, Direction direction, List<Point> charPositions, long attempts, bool failedMaxAttempts)
+    private void AddWordToList(string wordSpelling, Sprite wordClue, int x, int y, Direction direction, List<Point> charPositions)
     {
         try
         {
@@ -710,8 +711,7 @@ public class CrosswordManager : Singleton<CrosswordManager>
                 WordClue = wordClue,
                 StartPosition = new Point(x, y),
                 WordDirection = direction,
-                AttemptsCount = attempts,
-                FailedMaxAttempts = failedMaxAttempts
+                CharPositions = charPositions
             };
 
             quizList.Add(word);  
@@ -763,9 +763,6 @@ public class CrosswordManager : Singleton<CrosswordManager>
 
             // Reaching this point would mean that the word didn't cross through another word.
             // Hence flag it as isolated and clear the corresponding cells in the character wordMatrix.
-            // However, if that is already flaged as failed, then no need to flag it again as isolated.
-
-            if (!wrd.FailedMaxAttempts)
                 wrd.Isolated = true;
 
             if (wrd.WordDirection == Direction.Down)

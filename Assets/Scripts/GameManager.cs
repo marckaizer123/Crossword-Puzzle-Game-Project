@@ -32,7 +32,7 @@ public class GameManager : Singleton<GameManager>
     {
         GetWordLists();
 
-        CrosswordManager.Instance.GetMasterList("Flags");
+        Crossword.Instance.GetMasterList("Flags");
     }
 
     private void GetWordLists()
