@@ -12,5 +12,7 @@ namespace Interfaces
         Point StartPosition { get; set; }
         Direction WordDirection { get; set; }
         bool Isolated { get; set; }
+
+        string Answer { get; set; }
     }
 }

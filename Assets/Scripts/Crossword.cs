@@ -12,7 +12,7 @@ public class Crossword : Singleton<Crossword>
     [SerializeField]
     private int maxAttempts;
 
-    private List<Word> quizList = new List<Word>(); //Contains all the words that have been already been placed into the wordMatrix, as well as their corresponding sprite and positions.
+    public List<Word> quizList = new List<Word>(); //Contains all the words that have been already been placed into the wordMatrix, as well as their corresponding sprite and positions.
     private List<string> usedWords = new List<string>();
     private List<Direction> directions = new List<Direction>();
 
@@ -101,6 +101,9 @@ public class Crossword : Singleton<Crossword>
             {
                 CheckIfTheWordIsIsolatedAndFlagAccordingly(wrd);
             }
+
+            Quiz.Instance.ChangeClue(0);
+            
         }
         catch (System.Exception e)
         {     
@@ -711,7 +714,8 @@ public class Crossword : Singleton<Crossword>
                 WordClue = wordClue,
                 StartPosition = new Point(x, y),
                 WordDirection = direction,
-                CharPositions = charPositions
+                CharPositions = charPositions,
+                Answer = ""
             };
 
             quizList.Add(word);  

@@ -44,6 +44,10 @@ public class Grid : Singleton<Grid>
                 }            
             }
         }
+
+        Quiz.Instance.HighlightTiles(0);
+        Quiz.Instance.FocusOnWord(0);
+        Quiz.Instance.ChangeAnswerText(0);
     }
 
     private void PlaceTile(int tileIndex, int x, int y, char letter)

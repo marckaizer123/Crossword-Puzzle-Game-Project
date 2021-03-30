@@ -12,4 +12,5 @@ public class Word : IDetails
     public Direction WordDirection { get; set; }
     public List<Point> CharPositions { get; set; }
     public bool Isolated { get; set; }
+    public string Answer { get; set; }
 }
