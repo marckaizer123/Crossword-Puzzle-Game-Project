@@ -26,7 +26,8 @@ public class Quiz : Singleton<Quiz>
 
     private int index = 0;
     private int previousIndex = 0;
-    string answerString;
+    string currentAnswer;
+    string actualAnswer;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +51,7 @@ public class Quiz : Singleton<Quiz>
         RemoveHighlights(previousIndex);
         FocusOnWord(index);
         HighlightTiles(index);
-        ChangeAnswerText(index);
+        ShowAnswerText(index);
     }
 
     public void NextWord()
@@ -68,7 +69,7 @@ public class Quiz : Singleton<Quiz>
         RemoveHighlights(previousIndex);
         FocusOnWord(index);
         HighlightTiles(index);
-        ChangeAnswerText(index);
+        ShowAnswerText(index);
     }
 
     public void ChangeClue(int index)
@@ -100,15 +101,12 @@ public class Quiz : Singleton<Quiz>
         tile.GetComponent<Image>().color = newColor;
     }
 
-    //Make this better.
     public void FocusOnWord(int index)
     {
         Canvas.ForceUpdateCanvases();
 
         Point firstPoint = Crossword.Instance.quizList[index].CharPositions[0];
         Point lastPoint = Crossword.Instance.quizList[index].CharPositions.Last();
-
-
 
         float midpointX = (Grid.Instance.Tiles[firstPoint].GetComponent<RectTransform>().localPosition.x + Grid.Instance.Tiles[lastPoint].GetComponent<RectTransform>().localPosition.x) /2;
         float midpointY = (Grid.Instance.Tiles[firstPoint].GetComponent<RectTransform>().localPosition.y + Grid.Instance.Tiles[lastPoint].GetComponent<RectTransform>().localPosition.y) / 2;
@@ -121,23 +119,42 @@ public class Quiz : Singleton<Quiz>
 
     }
 
-    public void ChangeAnswerText(int index)
+    public void ShowAnswerText(int index)
     {
-        answerString = "";
+        currentAnswer = "";
+        actualAnswer = Crossword.Instance.quizList[index].WordSpelling;
 
-        if (Crossword.Instance.quizList[index].Answer == "")
+        foreach (Point point in Crossword.Instance.quizList[index].CharPositions)
         {
-            for (int i = 0; i < Crossword.Instance.quizList[index].WordSpelling.Length; i++)
+            if(Grid.Instance.Tiles[point].TileLetter.text == "")
             {
-                answerString += "_ ";
-                answer.text = answerString;
-                answer2.text = answerString;
+                currentAnswer += " _";
+            }
+            else
+            {
+                currentAnswer += Grid.Instance.Tiles[point].TileLetter.text;
+            }     
+        }
+
+        if (currentAnswer == "")
+        {
+            for (int i = 0; i < actualAnswer.Length; i++)
+            {
+                currentAnswer += "_ ";
+                answer.text = currentAnswer;
+                answer2.text = currentAnswer;
             }
         }
         else
         {
-            answer.text = Crossword.Instance.quizList[index].Answer;
-            answer2.text = Crossword.Instance.quizList[index].Answer;
+            answer.text = currentAnswer;
+            answer2.text = currentAnswer;
+
+            for (int i = 0; i < actualAnswer.Length - currentAnswer.Length; i++)
+            {
+                answer2.text += " _";
+                answer.text += " _";
+            }
         }
     }
 
@@ -148,38 +165,53 @@ public class Quiz : Singleton<Quiz>
 
     public void ButtonPress(string btnPressed)
     {
+        actualAnswer = Crossword.Instance.quizList[index].WordSpelling;
+        currentAnswer = Crossword.Instance.quizList[index].Answer;
 
-        if(Crossword.Instance.quizList[index].Answer == "")
-        {
-            answer2.text = "";
-        }
-        else
-            answer2.text = Crossword.Instance.quizList[index].Answer;
 
-        if (btnPressed != "<" && Crossword.Instance.quizList[index].Answer.Length < Crossword.Instance.quizList[index].WordSpelling.Length)
+        if (btnPressed != "<" && currentAnswer.Length < actualAnswer.Length)
         {
-            answer2.text += btnPressed;
-            Crossword.Instance.quizList[index].Answer = answer2.text;
+            Crossword.Instance.quizList[index].Answer += btnPressed;
+            currentAnswer = Crossword.Instance.quizList[index].Answer;
         }
-        else if(btnPressed == "<" && answer2.text.Length>0)
+        else if (btnPressed == "<" && currentAnswer.Length > 0) //Pressing the delete button
         {
-            answer2.text = answer2.text.Remove(answer2.text.Length - 1, 1);
-            Crossword.Instance.quizList[index].Answer = answer2.text;
+            Crossword.Instance.quizList[index].Answer = currentAnswer.Remove(currentAnswer.Length - 1, 1);
+            currentAnswer = Crossword.Instance.quizList[index].Answer;
         }
-            
+
+        answer2.text = currentAnswer;
+        answer.text = currentAnswer;
+
+        for (int i = 0; i < actualAnswer.Length - currentAnswer.Length; i++)
+        {
+            answer2.text += " _";
+            answer.text += " _";
+        }            
     }
 
     public void SubmitAnswer()
     {
-        if (true)
-        {
+        currentAnswer = Crossword.Instance.quizList[index].Answer;
+        int count = 0;
 
+        foreach (Point point in Crossword.Instance.quizList[index].CharPositions)
+        {
+            if (count<=currentAnswer.Length-1)
+            {
+                Grid.Instance.Tiles[point].TileLetter.text = currentAnswer[count].ToString();
+                count++;
+            }
+            else
+            {
+                Grid.Instance.Tiles[point].TileLetter.text = "";
+            }
+            
         }
 
-
-        answer.text = answer2.text;
         answerPanel.SetActive(false);
     }
+
 
     public void FinishCrossword()
     {

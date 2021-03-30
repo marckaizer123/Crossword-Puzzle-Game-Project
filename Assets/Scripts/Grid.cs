@@ -36,25 +36,25 @@ public class Grid : Singleton<Grid>
             {
                 if (Crossword.Instance.wordMatrix[x, y].Equals('\0'))
                 {
-                    PlaceTile(1, x, y, Crossword.Instance.wordMatrix[x, y]);
+                    PlaceTile(1, x, y);
                 }
                 else
                 {
-                    PlaceTile(0, x, y, Crossword.Instance.wordMatrix[x, y]);
+                    PlaceTile(0, x, y);
                 }            
             }
         }
 
         Quiz.Instance.HighlightTiles(0);
         Quiz.Instance.FocusOnWord(0);
-        Quiz.Instance.ChangeAnswerText(0);
+        Quiz.Instance.ShowAnswerText(0);
     }
 
-    private void PlaceTile(int tileIndex, int x, int y, char letter)
+    private void PlaceTile(int tileIndex, int x, int y)
     {
         Tile newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<Tile>();
 
         //Sets the parameters of the tile.
-        newTile.Setup(crosswordPanel.transform, new Point(x, y), letter);
+        newTile.Setup(crosswordPanel.transform, new Point(x, y));
     }
 }

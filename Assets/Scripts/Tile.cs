@@ -19,11 +19,10 @@ public class Tile : MonoBehaviour
 
     
 
-    public void Setup(Transform parent, Point gridPos, char letter)
+    public void Setup(Transform parent, Point gridPos)
     {
         this.transform.SetParent(parent, false);
         this.GridPosition = gridPos;
-        this.TileLetter.text = letter.ToString();
         Grid.Instance.Tiles.Add(gridPos, this);
     }
 }
