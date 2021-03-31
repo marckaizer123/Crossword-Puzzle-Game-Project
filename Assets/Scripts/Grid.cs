@@ -47,7 +47,7 @@ public class Grid : Singleton<Grid>
 
         Quiz.Instance.HighlightTiles(0);
         Quiz.Instance.FocusOnWord(0);
-        Quiz.Instance.ShowAnswerText(0);
+        Quiz.Instance.UpdateAnswerText(0);
     }
 
     private void PlaceTile(int tileIndex, int x, int y)
