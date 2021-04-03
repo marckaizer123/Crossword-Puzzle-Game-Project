@@ -13,18 +13,10 @@ public class GameManager : Singleton<GameManager>
     public List<KeyValuePair<string, Sprite>> logoNames= new List<KeyValuePair<string, Sprite>>();
     public List<KeyValuePair<string, Sprite>> movieNames = new List<KeyValuePair<string, Sprite>>();
 
-
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
     // Start is called before the first frame update
     void Start()
     {
         GetWordLists();
-
-        Crossword.Instance.GetMasterList("Flags");
     }
 
     private void GetWordLists()
@@ -35,26 +27,31 @@ public class GameManager : Singleton<GameManager>
 
         foreach (Sprite sprite in flags)
         {
-                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite)); ;         
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));       
         }
         foreach (Sprite sprite in logos)
         {
-                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
+                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
         }
         foreach (Sprite sprite in movies)
         {
-                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
+                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
         }
     }
 
-    private void ChooseCategory(string category)
+    public void ChooseCategory(string category)
     {
+        ShowPuzzle();
         Crossword.Instance.GetMasterList(category);
-    }
+        mainMenuPanel.SetActive(false);
 
+    }
 
     [SerializeField]
     private GameObject mainMenuPanel;
+
+    [SerializeField]
+    private GameObject menuPanel;
 
     [SerializeField]
     private GameObject categoryPanel;
@@ -65,26 +62,39 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject creditsPanel;
 
+    [SerializeField]
+    private GameObject crosswordPanel;
+
+    [SerializeField]
+    private GameObject quizPanel;
+
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
+        menuPanel.SetActive(true);
     }
 
     public void ShowCategories()
     {
-        mainMenuPanel.SetActive(false);
+        menuPanel.SetActive(false);
         categoryPanel.SetActive(true);
     }
     public void ShowOptions()
     {
-        mainMenuPanel.SetActive(false);
+        menuPanel.SetActive(false);
         optionsPanel.SetActive(true);
     }
     public void ShowCredits()
     {
-        mainMenuPanel.SetActive(false);
+        menuPanel.SetActive(false);
         creditsPanel.SetActive(true);
     }
+    public void ShowPuzzle()
+    {
+        crosswordPanel.SetActive(true);
+        quizPanel.SetActive(true);
+    }
+
 
     public void Quit()
     {
