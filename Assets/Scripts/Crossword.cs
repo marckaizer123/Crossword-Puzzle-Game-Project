@@ -7,6 +7,9 @@ using Globals;
 public class Crossword : Singleton<Crossword>
 {
     [SerializeField]
+    private int gridCellCount;
+
+    [SerializeField]
     private int initWordCount;
 
     [SerializeField]
@@ -55,7 +58,7 @@ public class Crossword : Singleton<Crossword>
                     PlaceWordsOnGrid(GameManager.Instance.flagNames);
                     break;
                 }
-        }     
+        }
     }
 
     private void PlaceWordsOnGrid(List<KeyValuePair<string, Sprite>> masterList)
@@ -64,7 +67,7 @@ public class Crossword : Singleton<Crossword>
         {
             quizList.Clear();
             usedWords.Clear();
-            wordMatrix = new char[GameManager.Instance.GridCellCount, GameManager.Instance.GridCellCount];
+            wordMatrix = new char[gridCellCount, gridCellCount];
             rnd = new System.Random(System.DateTime.Now.Millisecond);
             Direction direction;
             int x, y;
@@ -85,8 +88,8 @@ public class Crossword : Singleton<Crossword>
                         do
                         {
                             direction = GetDirection(rnd, 3);
-                            x = GetRandomAxis(rnd, GameManager.Instance.GridCellCount);
-                            y = GetRandomAxis(rnd, GameManager.Instance.GridCellCount);
+                            x = GetRandomAxis(rnd, gridCellCount);
+                            y = GetRandomAxis(rnd, gridCellCount);
                             success = PlaceTheWord(direction, x, y, masterList[i].Key, masterList[i].Value, i, ref attempts);
                             if (attempts > maxAttempts)
                                 break;
@@ -102,8 +105,12 @@ public class Crossword : Singleton<Crossword>
                 CheckIfTheWordIsIsolatedAndFlagAccordingly(wrd);
             }
 
+            Grid.Instance.CreateGrid();
             Quiz.Instance.ChangeClue(0);
-            
+            Quiz.Instance.HighlightTiles(0);
+            Quiz.Instance.FocusOnWord(0);
+            Quiz.Instance.UpdateAnswerText(0);
+
         }
         catch (System.Exception e)
         {     
@@ -154,7 +161,7 @@ public class Crossword : Singleton<Crossword>
                 case Direction.Right:
                     for (int i = 0, xx = x; i < word.Length; i++, xx++) // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (xx >= GameManager.Instance.GridCellCount)
+                        if (xx >= gridCellCount)
                         {
                             return false;  // Falling outside the grid. Hence placement unavailable.
                         }
@@ -243,7 +250,7 @@ public class Crossword : Singleton<Crossword>
                 case Direction.Down:
                     for (int i = 0, yy = y; i < word.Length; i++, yy++)     // First we check if the word can be placed in the array. For this it needs blanks there or the same letter (of another word) in the cell.
                     {
-                        if (yy >= GameManager.Instance.GridCellCount)
+                        if (yy >= gridCellCount)
                         {
                             return false;  // Falling outside the grid. Hence placement unavailable.
                         }
@@ -418,9 +425,9 @@ public class Crossword : Singleton<Crossword>
     {
         try
         {
-            if (x == GameManager.Instance.GridCellCount) return true;
+            if (x == gridCellCount) return true;
             bool isValid = true;
-            if (x + 1 < GameManager.Instance.GridCellCount)
+            if (x + 1 < gridCellCount)
             {
                 for (int i = 0; i < word.Length; y++, i++)
                 {
@@ -453,8 +460,8 @@ public class Crossword : Singleton<Crossword>
     {
         try
         {
-            if (x + word.Length == GameManager.Instance.GridCellCount) return true;
-            if (x + word.Length < GameManager.Instance.GridCellCount)
+            if (x + word.Length == gridCellCount) return true;
+            if (x + word.Length < gridCellCount)
                 return wordMatrix[x + word.Length, y] == '\0';
             return false;
         }
@@ -548,9 +555,9 @@ public class Crossword : Singleton<Crossword>
     {
         try
         {
-            if (y == GameManager.Instance.GridCellCount) return true;
+            if (y == gridCellCount) return true;
             bool isValid = true;
-            if (y + 1 < GameManager.Instance.GridCellCount)
+            if (y + 1 < gridCellCount)
             {
                 for (int i = 0; i < word.Length; x++, i++)
                 {
@@ -583,8 +590,8 @@ public class Crossword : Singleton<Crossword>
     {
         try
         {
-            if (y + word.Length == GameManager.Instance.GridCellCount) return true;
-            if (y + word.Length < GameManager.Instance.GridCellCount)
+            if (y + word.Length == gridCellCount) return true;
+            if (y + word.Length < gridCellCount)
                 return wordMatrix[x, y + word.Length] == '\0';
             return false;
         }
@@ -604,7 +611,7 @@ public class Crossword : Singleton<Crossword>
     /// <returns></returns>
     bool LegitimateOverlapOfAnExistingWord(int x, int y, string word, Direction direction)
     {
-        char[] chars = new char[GameManager.Instance.GridCellCount];
+        char[] chars = new char[gridCellCount];
         int originalX = x, originalY = y;
         try
         {
@@ -615,7 +622,7 @@ public class Crossword : Singleton<Crossword>
                         if (wordMatrix[x, y] == '\0') break;                                // First walk towards the left until you reach the beginning of the word that is already on the board.
                     ++x;
 
-                    for (int i = 0; x < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
+                    for (int i = 0; x < gridCellCount && i < gridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -633,7 +640,7 @@ public class Crossword : Singleton<Crossword>
                         if (wordMatrix[x, y] == '\0') break;                                // First walk towards the left until you reach the beginning of the word that is already on the board.
                     ++x;
 
-                    for (int i = 0; x < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
+                    for (int i = 0; x < gridCellCount && i < gridCellCount; x++, i++) // Now walk towards right until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -651,7 +658,7 @@ public class Crossword : Singleton<Crossword>
                         if (wordMatrix[x, y] == '\0') break;                                        // First walk upwards until you reach the beginning of the word that is already on the board.
                     ++y;
 
-                    for (int i = 0; y < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
+                    for (int i = 0; y < gridCellCount && i < gridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -669,7 +676,7 @@ public class Crossword : Singleton<Crossword>
                         if (wordMatrix[x, y] == '\0') break;                                        // First walk upwards until you reach the beginning of the word that is already on the board.
                     ++y;
 
-                    for (int i = 0; y < GameManager.Instance.GridCellCount && i < GameManager.Instance.GridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
+                    for (int i = 0; y < gridCellCount && i < gridCellCount; y++, i++) // Now walk downwards until you reach the end of the word that is already on the board.
                     {
                         if (wordMatrix[x, y] == '\0') break;
                         chars[i] = wordMatrix[x, y];
@@ -739,7 +746,7 @@ public class Crossword : Singleton<Crossword>
                             wrd.Isolated = false;
                             return;
                         }
-                if (wrd.StartPosition.X < GameManager.Instance.GridCellCount - 1)                                          // If there is a column of cells to the right of the down-directed word.
+                if (wrd.StartPosition.X < gridCellCount - 1)                                          // If there is a column of cells to the right of the down-directed word.
                     for (int x = wrd.StartPosition.X + 1, y = wrd.StartPosition.Y, i = 0; i < wrd.WordSpelling.Length; y++, i++)    // Walk downwards along the right column of the word.
                         if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that column.
                         {                                                                       // Which would mean another word passed through; hence this is not isolated.
@@ -756,7 +763,7 @@ public class Crossword : Singleton<Crossword>
                             wrd.Isolated = false;
                             return;
                         }
-                if (wrd.StartPosition.Y < GameManager.Instance.GridCellCount - 1)                                          // If there is a row of cells to the bottom of the right-directed word.
+                if (wrd.StartPosition.Y < gridCellCount - 1)                                          // If there is a row of cells to the bottom of the right-directed word.
                     for (int x = wrd.StartPosition.X, y = wrd.StartPosition.Y + 1, i = 0; i < wrd.WordSpelling.Length; x++, i++)    // Walk righwards along the bottom row of the word.
                         if (wordMatrix[x, y] != '\0')                                               // And see if there is any character to any cell of that row.
                         {                                                                       // Which would mean another word passed through; hence this is not isolated.
@@ -770,10 +777,10 @@ public class Crossword : Singleton<Crossword>
                 wrd.Isolated = true;
 
             if (wrd.WordDirection == Direction.Down)
-                for (int i = 0, x = wrd.StartPosition.X, y = wrd.StartPosition.Y; i < wrd.WordSpelling.Length && i < GameManager.Instance.GridCellCount; i++, y++)
+                for (int i = 0, x = wrd.StartPosition.X, y = wrd.StartPosition.Y; i < wrd.WordSpelling.Length && i < gridCellCount; i++, y++)
                     wordMatrix[x, y] = '\0';
             else if (wrd.WordDirection == Direction.Right)
-                for (int i = 0, x = wrd.StartPosition.X, y = wrd.StartPosition.Y; i < wrd.WordSpelling.Length && i < GameManager.Instance.GridCellCount; i++, x++)
+                for (int i = 0, x = wrd.StartPosition.X, y = wrd.StartPosition.Y; i < wrd.WordSpelling.Length && i < gridCellCount; i++, x++)
                     wordMatrix[x, y] = '\0';
         }
         catch (System.Exception e)

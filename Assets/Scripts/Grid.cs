@@ -20,13 +20,7 @@ public class Grid : Singleton<Grid>
     /// </summary>
     public Dictionary<Point, Tile> Tiles { get; set; }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        CreateGrid();
-    }
-
-    private void CreateGrid()
+    public void CreateGrid()
     {
         Tiles = new Dictionary<Point, Tile>();
 
@@ -45,9 +39,7 @@ public class Grid : Singleton<Grid>
             }
         }
 
-        Quiz.Instance.HighlightTiles(0);
-        Quiz.Instance.FocusOnWord(0);
-        Quiz.Instance.UpdateAnswerText(0);
+        
     }
 
     private void PlaceTile(int tileIndex, int x, int y)

@@ -5,14 +5,6 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField]
-    private int gridCellCount = 10;
-
-    public int GridCellCount
-    {
-        get { return gridCellCount; }
-    }
-
     public Sprite[] flags;
     public Sprite[] logos;
     public Sprite[] movies;
@@ -43,25 +35,21 @@ public class GameManager : Singleton<GameManager>
 
         foreach (Sprite sprite in flags)
         {
-            if (sprite.name.Length < 3 * gridCellCount / 5)
-            {
-                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite)); ;
-            }           
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite)); ;         
         }
         foreach (Sprite sprite in logos)
         {
-            if (sprite.name.Length < 3 * gridCellCount / 5)
-            {
                 logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
-            }
         }
         foreach (Sprite sprite in movies)
         {
-            if (sprite.name.Length < 3 * gridCellCount / 5)
-            {
                 movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper(), sprite));
-            }
         }
+    }
+
+    private void ChooseCategory(string category)
+    {
+        Crossword.Instance.GetMasterList(category);
     }
 
 

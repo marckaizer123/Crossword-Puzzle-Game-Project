@@ -3183,7 +3183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1d50113a594194196edf4eb75833b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridCellCount: 15
   flags: []
   logos: []
   movies: []
@@ -7835,8 +7834,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e70199464afd45a1bcfce9dffc843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridCellCount: 15
   initWordCount: 1
-  maxAttempts: 50
+  maxAttempts: 10
 --- !u!114 &2074316735
 MonoBehaviour:
   m_ObjectHideFlags: 0
