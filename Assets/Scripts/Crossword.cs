@@ -66,7 +66,7 @@ public class Crossword : Singleton<Crossword>
         try
         {
             quizList.Clear();
-            usedWords.Clear();
+            usedWords.Clear();         
             wordMatrix = new char[gridCellCount, gridCellCount];
             rnd = new System.Random(System.DateTime.Now.Millisecond);
             Direction direction;
@@ -74,6 +74,7 @@ public class Crossword : Singleton<Crossword>
             long attempts;
             bool success;
             string word;
+            int count = 0;
 
             while (quizList.Count<10)//Iterates through the masterlist again if the total words placed are less than 10.
             {
@@ -96,9 +97,12 @@ public class Crossword : Singleton<Crossword>
                         }
                         while (!success);
                     }
-                    else
-                        break;
                 }
+                count++;
+
+                if (count > 50)
+                    break;
+
             }
             foreach (Word wrd in quizList)             // Flag the words that are completely isolated.
             {
@@ -245,6 +249,7 @@ public class Crossword : Singleton<Crossword>
                     }
                         
                     AddWordToList(word, wordClue, x, y, direction, charPositions);
+                    usedWords.Add(word);
                     return true;
 
                 case Direction.Down:

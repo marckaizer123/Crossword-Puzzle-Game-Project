@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -68,6 +69,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject quizPanel;
 
+    [SerializeField]
+    private GameObject scorePanel;
+
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
@@ -95,6 +99,24 @@ public class GameManager : Singleton<GameManager>
         quizPanel.SetActive(true);
     }
 
+    [SerializeField]
+    private GameObject grid;
+
+    public void PlayAgain()
+    {
+        foreach (Transform child in grid.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        scorePanel.SetActive(false);  
+        crosswordPanel.SetActive(false);
+        quizPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+        categoryPanel.SetActive(true);
+
+    }
+
 
     public void Quit()
     {
@@ -106,7 +128,7 @@ public class GameManager : Singleton<GameManager>
         categoryPanel.SetActive(false);
         optionsPanel.SetActive(false);
         creditsPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        menuPanel.SetActive(true);
     }
 
 

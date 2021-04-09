@@ -245,8 +245,12 @@ public class Quiz : Singleton<Quiz>
         answerPanel.SetActive(false);
     }
 
+    [SerializeField]
+    private GameObject scorePanel;
+    [SerializeField]
+    private Text scoreText;
 
-    public void FinishCrossword()
+    private void FinishCrossword()
     {
         int score = 0;
         foreach (Word word in Crossword.Instance.quizList)
@@ -259,8 +263,13 @@ public class Quiz : Singleton<Quiz>
                 }
             }   
         }
-        Debug.Log(score*100);
+
+        score = score * 100;
+        scoreText.text = score.ToString();
+        scorePanel.SetActive(true);
     }
+
+    
 
 
 
