@@ -76,32 +76,36 @@ public class Crossword : Singleton<Crossword>
             string word;
             int count = 0;
 
-            while (quizList.Count<10)//Iterates through the masterlist again if the total words placed are less than 10.
+            while (quizList.Count<20)//Iterates through the masterlist again if the total words placed are less than 10.
             {
+
                 for (int i = 0; i < masterList.Count; i++) //iterates through the masterlist.
                 {
+                    
                     attempts = 0;
                     success = false;
                     word = masterList[i].Key;
 
-                    if (!usedWords.Contains(masterList[i].Key))//Prevents repetition of words.
+                    if (!usedWords.Contains(word))//Prevents repetition of words.
                     {
                         do
                         {
+                            if (attempts > maxAttempts)
+                                break;
                             direction = GetDirection(rnd, 3);
                             x = GetRandomAxis(rnd, gridCellCount);
                             y = GetRandomAxis(rnd, gridCellCount);
-                            success = PlaceTheWord(direction, x, y, masterList[i].Key, masterList[i].Value, i, ref attempts);
-                            if (attempts > maxAttempts)
-                                break;
+                            success = PlaceTheWord(direction, x, y, masterList[i].Key, masterList[i].Value, i, ref attempts);    
                         }
                         while (!success);
                     }
+                    Debug.Log(i + " " + word);
                 }
-                count++;
 
                 if (count > 50)
                     break;
+
+                count++;
 
             }
             foreach (Word wrd in quizList)             // Flag the words that are completely isolated.
@@ -117,8 +121,10 @@ public class Crossword : Singleton<Crossword>
 
         }
         catch (System.Exception e)
-        {     
+        {
             Debug.Log($"An error occurred in 'PlaceWordsOnTheBoard()' method of the 'GameEngine' class. Error msg: {e.Message}");
+
+            
         }
     }
 
@@ -249,7 +255,7 @@ public class Crossword : Singleton<Crossword>
                     }
                         
                     AddWordToList(word, wordClue, x, y, direction, charPositions);
-                    usedWords.Add(word);
+                    
                     return true;
 
                 case Direction.Down:
@@ -336,7 +342,6 @@ public class Crossword : Singleton<Crossword>
                     }
                         
                     AddWordToList(word, wordClue, x, y, direction, charPositions);
-                    usedWords.Add(word);
                     return true;
             }
             return false;   // Otherwise continue with a different place and index.
@@ -730,7 +735,8 @@ public class Crossword : Singleton<Crossword>
                 Answer = ""
             };
 
-            quizList.Add(word);  
+            quizList.Add(word);
+            usedWords.Add(wordSpelling);
         }
         catch (System.Exception e)
         {
