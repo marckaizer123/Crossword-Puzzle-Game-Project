@@ -52,15 +52,15 @@ public class GameManager : Singleton<GameManager>
 
         foreach (Sprite sprite in flags)
         {
-                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));       
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(" ", string.Empty), sprite));       
         }
         foreach (Sprite sprite in logos)
         {
-                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
+                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(" ", string.Empty), sprite));
         }
         foreach (Sprite sprite in places)
         {
-                placeNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
+                placeNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(" ", string.Empty), sprite));
         }
     }
 
@@ -72,8 +72,6 @@ public class GameManager : Singleton<GameManager>
         mainMenuPanel.SetActive(false);
 
     }
-
-    
 
     public void ShowMainMenu()
     {

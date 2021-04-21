@@ -38,8 +38,6 @@ public class Grid : Singleton<Grid>
                 }            
             }
         }
-
-        
     }
 
     private void PlaceTile(int tileIndex, int x, int y)

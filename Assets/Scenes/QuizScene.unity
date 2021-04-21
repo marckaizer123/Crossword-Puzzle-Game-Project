@@ -1231,6 +1231,7 @@ GameObject:
   - component: {fileID: 183968823}
   - component: {fileID: 183968825}
   - component: {fileID: 183968824}
+  - component: {fileID: 183968826}
   m_Layer: 5
   m_Name: AnswerPanel
   m_TagString: Untagged
@@ -1249,16 +1250,16 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2053213354}
   - {fileID: 328573951}
+  - {fileID: 2053213354}
   - {fileID: 325069513}
   - {fileID: 1044291188}
-  m_Father: {fileID: 1499493829}
-  m_RootOrder: 3
+  m_Father: {fileID: 1713230976}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0015259, y: -273.11}
+  m_AnchoredPosition: {x: 3.584, y: 298.68}
   m_SizeDelta: {x: 567.16754, y: 672.3623}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &183968824
@@ -1299,6 +1300,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183968822}
   m_CullTransparentMesh: 0
+--- !u!114 &183968826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183968822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 21
+    m_Bottom: 1
+  m_ChildAlignment: 1
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
 --- !u!1 &224951991
 GameObject:
   m_ObjectHideFlags: 0
@@ -2117,9 +2143,9 @@ RectTransform:
   m_Father: {fileID: 183968823}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 234}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 283.58377, y: -448.90585}
   m_SizeDelta: {x: 445.79724, y: 251.35602}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &325069514
@@ -2186,11 +2212,11 @@ RectTransform:
   m_LocalScale: {x: 0.99968, y: 0.99968, z: 0.99968}
   m_Children: []
   m_Father: {fileID: 183968823}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -118}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 283.58377, y: -124.26955}
   m_SizeDelta: {x: 206.5391, y: 206.5391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &328573952
@@ -5462,7 +5488,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Movies
+          m_StringArgument: Places
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &872453024
@@ -5598,9 +5624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1d50113a594194196edf4eb75833b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flags: []
-  logos: []
-  movies: []
   mainMenuPanel: {fileID: 697943301}
   menuPanel: {fileID: 99874525}
   categoryPanel: {fileID: 51252992}
@@ -5609,6 +5632,9 @@ MonoBehaviour:
   crosswordPanel: {fileID: 1169156511}
   quizPanel: {fileID: 1713230975}
   scorePanel: {fileID: 1898622966}
+  flags: []
+  logos: []
+  places: []
   grid: {fileID: 2074316731}
 --- !u!4 &936923157
 Transform:
@@ -6598,9 +6624,9 @@ RectTransform:
   m_Father: {fileID: 183968823}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.0015259, y: 63.109985}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 283.58377, y: -622.97314}
   m_SizeDelta: {x: 342.05817, y: 64.135925}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1044291189
@@ -7209,7 +7235,7 @@ RectTransform:
   m_Children:
   - {fileID: 2074316732}
   m_Father: {fileID: 1499493829}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -8405,10 +8431,8 @@ RectTransform:
   m_Children:
   - {fileID: 778604481}
   - {fileID: 697943302}
-  - {fileID: 1713230976}
-  - {fileID: 183968823}
   - {fileID: 1169156512}
-  - {fileID: 1898622967}
+  - {fileID: 1713230976}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9881,8 +9905,10 @@ RectTransform:
   - {fileID: 274273769}
   - {fileID: 239120144}
   - {fileID: 1590783360}
+  - {fileID: 183968823}
+  - {fileID: 1898622967}
   m_Father: {fileID: 1499493829}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -11182,12 +11208,12 @@ RectTransform:
   - {fileID: 850356680}
   - {fileID: 1501662001}
   - {fileID: 2008292569}
-  m_Father: {fileID: 1499493829}
-  m_RootOrder: 5
+  m_Father: {fileID: 1713230976}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.584, y: 0}
+  m_AnchoredPosition: {x: 3.584, y: 302}
   m_SizeDelta: {x: 567.16754, y: 672.3623}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1898622968
@@ -12249,11 +12275,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 183968823}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -261}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 283.58377, y: -275.38348}
   m_SizeDelta: {x: 538.7507, y: 63.046204}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2053213355
@@ -12618,7 +12644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e70199464afd45a1bcfce9dffc843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridCellCount: 15
+  gridCellCount: 25
   initWordCount: 1
   maxAttempts: 15
 --- !u!114 &2074316735
