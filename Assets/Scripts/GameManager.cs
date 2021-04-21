@@ -6,48 +6,6 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-    public Sprite[] flags;
-    public Sprite[] logos;
-    public Sprite[] movies;
-
-    public List<KeyValuePair<string, Sprite>> flagNames = new List<KeyValuePair<string, Sprite>>();
-    public List<KeyValuePair<string, Sprite>> logoNames= new List<KeyValuePair<string, Sprite>>();
-    public List<KeyValuePair<string, Sprite>> movieNames = new List<KeyValuePair<string, Sprite>>();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        GetWordLists();
-    }
-
-    private void GetWordLists()
-    {
-        flags = Resources.LoadAll<Sprite>("Flags");
-        logos = Resources.LoadAll<Sprite>("Logos");
-        movies = Resources.LoadAll<Sprite>("Movies");
-
-        foreach (Sprite sprite in flags)
-        {
-                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));       
-        }
-        foreach (Sprite sprite in logos)
-        {
-                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
-        }
-        foreach (Sprite sprite in movies)
-        {
-                movieNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
-        }
-    }
-
-    public void ChooseCategory(string category)
-    {
-        ShowPuzzle();
-        Crossword.Instance.GetMasterList(category);
-        mainMenuPanel.SetActive(false);
-
-    }
-
     [SerializeField]
     private GameObject mainMenuPanel;
 
@@ -72,6 +30,51 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject scorePanel;
 
+    public Sprite[] flags;
+    public Sprite[] logos;
+    public Sprite[] places;
+
+    public List<KeyValuePair<string, Sprite>> flagNames = new List<KeyValuePair<string, Sprite>>();
+    public List<KeyValuePair<string, Sprite>> logoNames= new List<KeyValuePair<string, Sprite>>();
+    public List<KeyValuePair<string, Sprite>> placeNames = new List<KeyValuePair<string, Sprite>>();
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        GetWordLists();
+    }
+
+    private void GetWordLists()
+    {
+        flags = Resources.LoadAll<Sprite>("Flags");
+        logos = Resources.LoadAll<Sprite>("Logos");
+        places = Resources.LoadAll<Sprite>("Places");
+
+        foreach (Sprite sprite in flags)
+        {
+                flagNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));       
+        }
+        foreach (Sprite sprite in logos)
+        {
+                logoNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
+        }
+        foreach (Sprite sprite in places)
+        {
+                placeNames.Add(new KeyValuePair<string, Sprite>(sprite.name.ToUpper().Replace(@"\s+", ""), sprite));
+        }
+    }
+
+    public void ChooseCategory(string category)
+    {
+        crosswordPanel.SetActive(true);
+        quizPanel.SetActive(true);
+        Crossword.Instance.GetMasterList(category);
+        mainMenuPanel.SetActive(false);
+
+    }
+
+    
+
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
@@ -93,11 +96,7 @@ public class GameManager : Singleton<GameManager>
         menuPanel.SetActive(false);
         creditsPanel.SetActive(true);
     }
-    public void ShowPuzzle()
-    {
-        crosswordPanel.SetActive(true);
-        quizPanel.SetActive(true);
-    }
+
 
     [SerializeField]
     private GameObject grid;

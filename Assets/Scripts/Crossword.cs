@@ -48,9 +48,9 @@ public class Crossword : Singleton<Crossword>
                     PlaceWordsOnGrid(GameManager.Instance.logoNames);
                     break;
                 }
-            case "Movies":
+            case "Places":
                 {
-                    PlaceWordsOnGrid(GameManager.Instance.movieNames);
+                    PlaceWordsOnGrid(GameManager.Instance.placeNames);
                     break;
                 }
             default:

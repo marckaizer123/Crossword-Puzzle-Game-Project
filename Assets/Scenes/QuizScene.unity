@@ -5385,7 +5385,7 @@ GameObject:
   - component: {fileID: 872453024}
   - component: {fileID: 872453023}
   m_Layer: 5
-  m_Name: MoviesButton
+  m_Name: PlacesButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10972,7 +10972,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Movies
+  m_Text: Places
 --- !u!222 &1830194709
 CanvasRenderer:
   m_ObjectHideFlags: 0
