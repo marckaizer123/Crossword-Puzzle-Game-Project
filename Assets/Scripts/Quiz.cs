@@ -133,6 +133,10 @@ public class Quiz : Singleton<Quiz>
             Crossword.Instance.quizList[index].Answer = currentAnswer.Remove(currentAnswer.Length - 1, 1);
             UpdateGridAnswer();
         }
+        else
+        {
+            AudioManager.Instance.PlaySFX("Error");
+        }
 
         UpdateAnswerText(index);
     }
@@ -242,6 +246,7 @@ public class Quiz : Singleton<Quiz>
 
     public void SubmitAnswer()
     {
+        AudioManager.Instance.PlaySFX("Submit");
         answerPanel.SetActive(false);
     }
 
@@ -252,6 +257,7 @@ public class Quiz : Singleton<Quiz>
 
     private void FinishCrossword()
     {
+        AudioManager.Instance.PlaySFX("Finish");
         int score = 0;
         foreach (Word word in Crossword.Instance.quizList)
         {
