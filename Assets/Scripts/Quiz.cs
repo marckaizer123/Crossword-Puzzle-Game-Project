@@ -274,14 +274,4 @@ public class Quiz : Singleton<Quiz>
         scoreText.text = score.ToString();
         scorePanel.SetActive(true);
     }
-
-    
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -30,6 +30,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject scorePanel;
 
+    [SerializeField]
+    private GameObject pauseButton;
+
+    [SerializeField]
+    private GameObject startButton;
+
+    [SerializeField]
+    private GameObject backButton;
+
     public Sprite[] flags;
     public Sprite[] logos;
     public Sprite[] places;
@@ -70,13 +79,28 @@ public class GameManager : Singleton<GameManager>
         quizPanel.SetActive(true);
         Crossword.Instance.GetMasterList(category);
         mainMenuPanel.SetActive(false);
+        pauseButton.SetActive(true);
 
     }
 
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
+        startButton.SetActive(true);
+        backButton.SetActive(false);
         menuPanel.SetActive(true);
+    }
+
+    public void ShowGameMenu()
+    {
+        mainMenuPanel.SetActive(true);
+        startButton.SetActive(false);
+        menuPanel.SetActive(true);
+        backButton.SetActive(true);
+        categoryPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+
     }
 
     public void ShowCategories()
@@ -111,6 +135,7 @@ public class GameManager : Singleton<GameManager>
         quizPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
         categoryPanel.SetActive(true);
+        pauseButton.SetActive(false);
 
     }
 
@@ -126,6 +151,16 @@ public class GameManager : Singleton<GameManager>
         optionsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         menuPanel.SetActive(true);
+        startButton.SetActive(true);
+    }
+
+    public void BackToGame()
+    {
+        mainMenuPanel.SetActive(false);
+        categoryPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        menuPanel.SetActive(false);
     }
 
 
