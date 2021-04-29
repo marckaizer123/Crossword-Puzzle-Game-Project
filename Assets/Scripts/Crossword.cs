@@ -78,10 +78,8 @@ public class Crossword : Singleton<Crossword>
 
             while (quizList.Count<20)//Iterates through the masterlist again if the total words placed are less than 10.
             {
-
                 for (int i = 0; i < masterList.Count; i++) //iterates through the masterlist.
-                {
-                    
+                {  
                     attempts = 0;
                     success = false;
                     word = masterList[i].Key;
@@ -99,7 +97,6 @@ public class Crossword : Singleton<Crossword>
                         }
                         while (!success);
                     }
-                    Debug.Log(i + " " + word);
                 }
 
                 if (count > 50)
@@ -112,7 +109,7 @@ public class Crossword : Singleton<Crossword>
             {
                 CheckIfTheWordIsIsolatedAndFlagAccordingly(wrd);
             }
-
+            //Creates the grid after the wordmatrix is finished and focuses on the first item on the list.
             Grid.Instance.CreateGrid();
             Quiz.Instance.ChangeClue(0);
             Quiz.Instance.HighlightTiles(0);
@@ -123,8 +120,6 @@ public class Crossword : Singleton<Crossword>
         catch (System.Exception e)
         {
             Debug.Log($"An error occurred in 'PlaceWordsOnTheBoard()' method of the 'GameEngine' class. Error msg: {e.Message}");
-
-            
         }
     }
 

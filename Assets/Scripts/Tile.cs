@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
     public Point GridPosition { get; set; }
-
     public Text TileLetter;
 
     public Vector2 WorldPosition
@@ -16,9 +13,6 @@ public class Tile : MonoBehaviour
             return GetComponent<Image>().sprite.bounds.center;
         }
     }
-
-    
-
     public void Setup(Transform parent, Point gridPos)
     {
         this.transform.SetParent(parent, false);

@@ -12,7 +12,6 @@ public struct Point
         this.Y = y;
     }
 
-
     /// <summary>
     /// Check if first point is equal to second point
     /// </summary>

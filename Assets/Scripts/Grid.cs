@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Globals;
 
 /// <summary>
 /// Function for the grid that the crossword would be placed on.
@@ -30,11 +27,11 @@ public class Grid : Singleton<Grid>
             {
                 if (Crossword.Instance.wordMatrix[x, y].Equals('\0'))
                 {
-                    PlaceTile(1, x, y);
+                    PlaceTile(1, x, y); //if the cell at the position is empty, then place a transparent tile.
                 }
                 else
                 {
-                    PlaceTile(0, x, y);
+                    PlaceTile(0, x, y);  //if the cell at the position contains a letter, then place blank white tile.
                 }            
             }
         }

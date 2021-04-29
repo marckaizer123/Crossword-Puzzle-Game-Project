@@ -1,41 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
     private GameObject mainMenuPanel;
-
     [SerializeField]
     private GameObject menuPanel;
-
     [SerializeField]
     private GameObject categoryPanel;
-
     [SerializeField]
     private GameObject optionsPanel;
-
     [SerializeField]
     private GameObject creditsPanel;
-
     [SerializeField]
     private GameObject crosswordPanel;
-
     [SerializeField]
     private GameObject quizPanel;
-
     [SerializeField]
     private GameObject scorePanel;
-
     [SerializeField]
     private GameObject pauseButton;
-
     [SerializeField]
     private GameObject startButton;
-
     [SerializeField]
     private GameObject backButton;
 
@@ -80,7 +66,6 @@ public class GameManager : Singleton<GameManager>
         Crossword.Instance.GetMasterList(category);
         mainMenuPanel.SetActive(false);
         pauseButton.SetActive(true);
-
     }
 
     public void ShowMainMenu()
@@ -100,7 +85,6 @@ public class GameManager : Singleton<GameManager>
         categoryPanel.SetActive(false);
         optionsPanel.SetActive(false);
         creditsPanel.SetActive(false);
-
     }
 
     public void ShowCategories()
@@ -136,10 +120,7 @@ public class GameManager : Singleton<GameManager>
         mainMenuPanel.SetActive(true);
         categoryPanel.SetActive(true);
         pauseButton.SetActive(false);
-
     }
-
-
     public void Quit()
     {
         Application.Quit();
@@ -162,8 +143,4 @@ public class GameManager : Singleton<GameManager>
         creditsPanel.SetActive(false);
         menuPanel.SetActive(false);
     }
-
-
-
-
 }

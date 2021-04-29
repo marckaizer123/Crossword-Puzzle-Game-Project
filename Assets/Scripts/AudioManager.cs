@@ -1,23 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AudioManager : Singleton<AudioManager>
 {
-
     [SerializeField]
     private AudioSource musicSource;
-
     [SerializeField]
     private Slider musicSlider;
-
     [SerializeField]
     private AudioSource sfxSource;
-
     [SerializeField]
     private Slider sfxSlider;
-
 
 
     Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
@@ -25,7 +19,6 @@ public class AudioManager : Singleton<AudioManager>
     // Start is called before the first frame update
     void Start()
     {
-
         //load all the audio clips in our Resources/Audio folder.
         AudioClip[] clips = Resources.LoadAll<AudioClip>("Audio") as AudioClip[];
 
@@ -70,6 +63,5 @@ public class AudioManager : Singleton<AudioManager>
 
         musicSlider.value = musicSource.volume;
         sfxSlider.value = sfxSource.volume;
-
     }
 }
