@@ -112,7 +112,7 @@ public class Crossword : Singleton<Crossword>
             //Creates the grid after the wordmatrix is finished and focuses on the first item on the list.
             Grid.Instance.CreateGrid();
             Quiz.Instance.ChangeClue(0);
-            Quiz.Instance.HighlightTiles(0);
+            Quiz.Instance.HighlightSelected(0);
             Quiz.Instance.FocusOnWord(0);
             Quiz.Instance.UpdateAnswerText(0);
 

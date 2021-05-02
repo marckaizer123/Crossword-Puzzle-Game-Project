@@ -6,22 +6,18 @@ public class Quiz : Singleton<Quiz>
 {
     [SerializeField]
     private GameObject clue;
-
     [SerializeField]
     private GameObject clue2;
-
     [SerializeField]
     private Text answer;
-
     [SerializeField]
     private Text answer2;
-
     [SerializeField]
     private ScrollRect scrollRect;
-
     [SerializeField]
     private GameObject answerPanel;
-
+    [SerializeField]
+    private GameObject perfectScoreText;
     private int index = 0;
     private int previousIndex = 0;
     string currentAnswer;
@@ -47,7 +43,7 @@ public class Quiz : Singleton<Quiz>
         ChangeClue(index);
         RemoveHighlights(previousIndex);
         FocusOnWord(index);
-        HighlightTiles(index);
+        HighlightSelected(index);
         UpdateAnswerText(index);
     }
 
@@ -65,7 +61,7 @@ public class Quiz : Singleton<Quiz>
         ChangeClue(index);
         RemoveHighlights(previousIndex);
         FocusOnWord(index);
-        HighlightTiles(index);
+        HighlightSelected(index);
         UpdateAnswerText(index);
     }
 
@@ -93,11 +89,12 @@ public class Quiz : Singleton<Quiz>
         scrollRect.content.localPosition = result;
     }
 
-    public void HighlightTiles(int index)
+    public void HighlightSelected(int index)
     {
         foreach (Point point in Crossword.Instance.quizList[index].CharPositions)
         {
-            ColorTile(Grid.Instance.Tiles[point], Color.yellow);
+            if (Grid.Instance.Tiles[point].GetComponent<Image>().color != Color.red)
+                ColorTile(Grid.Instance.Tiles[point], Color.yellow);
         }
     }
 
@@ -105,7 +102,21 @@ public class Quiz : Singleton<Quiz>
     {
         foreach (Point point in Crossword.Instance.quizList[index].CharPositions)
         {
-            ColorTile(Grid.Instance.Tiles[point], Color.white);
+            if(Grid.Instance.Tiles[point].GetComponent<Image>().color != Color.red)
+                ColorTile(Grid.Instance.Tiles[point], Color.white);
+        }
+    }
+
+    public void HighlightErrors(int index)
+    {
+        Word word = Crossword.Instance.quizList[index];
+        for (int i = 0; i < word.Answer.Length; i++)
+        {
+            if (!word.Answer[i].Equals(word.WordSpelling[i]))
+            {
+                Point point = word.CharPositions[i];
+                ColorTile(Grid.Instance.Tiles[point], Color.red);
+            }
         }
     }
 
@@ -245,6 +256,9 @@ public class Quiz : Singleton<Quiz>
     public void SubmitAnswer()
     {
         AudioManager.Instance.PlaySFX("Submit");
+
+        HighlightErrors(index);
+
         answerPanel.SetActive(false);
     }
 
@@ -257,15 +271,26 @@ public class Quiz : Singleton<Quiz>
     {
         AudioManager.Instance.PlaySFX("Finish");
         int score = 0;
+        int totalScore = 0;
+
         foreach (Word word in Crossword.Instance.quizList)
         {
-            for (int i = 0; i < word.Answer.Length; i++)
+            for (int i = 0; i < word.WordSpelling.Length; i++)
             {
+                totalScore += 1;
+            }
+
+            for (int i = 0; i < word.Answer.Length; i++)
+            { 
                 if (word.Answer[i].Equals(word.WordSpelling[i]))
                 {
                     score += 1;
                 }
             }   
+        }
+        if(score == totalScore)
+        {
+            perfectScoreText.SetActive(true);
         }
 
         score = score * 100;

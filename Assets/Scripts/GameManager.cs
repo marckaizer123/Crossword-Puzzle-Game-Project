@@ -3,6 +3,8 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
+    private GameObject grid;
+    [SerializeField]
     private GameObject mainMenuPanel;
     [SerializeField]
     private GameObject menuPanel;
@@ -24,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     private GameObject startButton;
     [SerializeField]
     private GameObject backButton;
+    [SerializeField]
+    private GameObject perfectScoreText;
 
     public Sprite[] flags;
     public Sprite[] logos;
@@ -104,8 +108,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    [SerializeField]
-    private GameObject grid;
+    
 
     public void PlayAgain()
     {
@@ -113,7 +116,7 @@ public class GameManager : Singleton<GameManager>
         {
             GameObject.Destroy(child.gameObject);
         }
-
+        perfectScoreText.SetActive(false);
         scorePanel.SetActive(false);  
         crosswordPanel.SetActive(false);
         quizPanel.SetActive(false);
